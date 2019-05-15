@@ -1,9 +1,13 @@
 
+// please configure your GITHUB credentials inside config.js 
+// to enable the 5000 GitHub API calls/hour limit
+//
+//   let GITAUTH = btoa("mygithubuser" + ":" + "mygithubpassword");
 
 var gitusers = [	'bashir-panjshiri','EvertdeVries','Callisto79','R3NOCP','erwinsnijder',
 					'HarrietKiyai','jellevanderschaaf','JoskedeJong','Ludelaplu','tzanto',
 					'Aletta104','drohnwynandrt','OHiddema','SamirHartlief','Aarnoud-Meijer','DJLemstra',
-					'JaccoGritter','LanaSijsling','jdereus87','supersmitty2018','IvoJongmans'	];
+					'JaccoGritter','LanaSijsling','jdereus87','supersmitty2018','IvoJongmans'];
 
 var commitmap = new Map();
 var repomap = new Map();
@@ -39,8 +43,24 @@ function countCommits(susername, sreponame) {
 }
 
 
-
 $(document).ready(function(){
+
+
+	$('#reportbutton').click(function() {
+
+		console.log('====== report ===== ');
+		
+		var stats = [];
+
+		for (var gituser of gitusers)
+	    {
+
+	       console.log(gituser + "," + repomap.get(gituser) + ',' + commitmap.get(gituser));
+	       $('#outputdiv').html( $('#outputdiv').html() + "<li>" + gituser + " : " + repomap.get(gituser) + " repos, " + commitmap.get(gituser) + " commits"); 
+	   }    
+
+
+	});
     
 
 	$('#scanbutton').click(function() {
