@@ -13,41 +13,7 @@ var commitmap = new Map();
 var repomap = new Map();
 
 
-function countCommits(susername, sreponame) {
-
-
-	//api.github.com/repos/:user/repositoryNameFromArray/commits?author=:user 
-  $.ajax({
-       // url: "https://api.github.com/repos/" + susername  + "/" + sreponame + "/commits?author="  + susername,
-    	 url: "https://api.github.com/repos/" + susername  + "/" + sreponame + "/commits",
-    	
-        // url: "https://api.github.com/rate_limit",
-        headers: { Authorization: "Basic " + GITAUTH },
-		success: function(result){
-			
-				console.log(susername + "." + sreponame + " : " + result.length);
-				let oldcommits = 0;
-				if (commitmap.get(susername) != null)
-				  oldcommits =  commitmap.get(susername);
-
-				commitmap.set(susername, oldcommits + result.length);
-
-		
-				}
-
-			//$('#div1').html( $('#div1').html() + "<BR>" + currentuser + ": " + result.length); 
-      		
-    	});
-
-
-
-}
-
-
-$(document).ready(function(){
-
-
-	$('#reportbutton').click(function() {
+function updateReport() {
 
 		console.log('====== report ===== ');
 		
@@ -82,9 +48,9 @@ $(document).ready(function(){
 			data:tabledata1, //load initial data into table
 			layout:"fitColumns", //fit columns to width of table (optional)
 			columns:[ //Define Table Columns
-				{title:"Name", field:"name", sorter:"string", width:150},
-				{title:"Repositories", field:"repocount", sorter:"number", align:"left", formatter:"progress",formatterParams:{legend:true,labelField:"repocount"} },
-				{title:"Commits", field:"commitcount", sorter:"number", align:"left", formatter:"progress",formatterParams:{legend:true,labelField:"commitcount"} },
+				{title:"Name", field:"name", sorter:"string", width:250},
+				{title:"Repositories", field:"repocount", sorter:"number", align:"left", width: 100},
+				{title:"Commits", field:"commitcount", sorter:"number", align:"left", width: 100 },
 
 			],
 		    rowClick:function(e, id, data, row){ //trigger an alert message when the row is clicked
@@ -93,12 +59,51 @@ $(document).ready(function(){
 		});
 
 
-
-
-
-
-	});
+	};
     
+
+function countCommits(susername, sreponame) {
+
+
+	//api.github.com/repos/:user/repositoryNameFromArray/commits?author=:user 
+  $.ajax({
+       // url: "https://api.github.com/repos/" + susername  + "/" + sreponame + "/commits?author="  + susername,
+    	 url: "https://api.github.com/repos/" + susername  + "/" + sreponame + "/commits",
+    	
+        // url: "https://api.github.com/rate_limit",
+        headers: { Authorization: "Basic " + GITAUTH },
+		success: function(result){
+			
+				console.log(susername + "." + sreponame + " : " + result.length);
+				let oldcommits = 0;
+				if (commitmap.get(susername) != null)
+				  oldcommits =  commitmap.get(susername);
+
+				commitmap.set(susername, oldcommits + result.length);
+				
+
+		
+				}
+
+			//$('#div1').html( $('#div1').html() + "<BR>" + currentuser + ": " + result.length); 
+      		
+    	});
+
+
+
+}
+
+
+$(document).ready(function(){
+
+
+	
+$(document).ajaxStop(function() {
+  // place code to be executed on completion of last outstanding ajax call here
+  	console.log(" READY" );
+  	updateReport();
+});
+
 
 	$('#scanbutton').click(function() {
 
@@ -120,15 +125,24 @@ $(document).ready(function(){
 				for (var gitrepo of result) {
 					let currentreponame = gitrepo.name;
 
-					let oldrepos = 0;
-					if (repomap.get(currentuser) != null)
-					  oldrepos =  repomap.get(currentuser);
+					//if (gitrepo.fork) alert(currentuser + " . " + currentreponame);
 
-					repomap.set(currentuser, oldrepos + 1);
 
-					//console.log(currentrepo.name);
-					countCommits(currentuser, currentreponame);
-				}
+					if (!gitrepo.fork) {
+						// do not count forked repos
+
+						let oldrepos = 0;
+						if (repomap.get(currentuser) != null)
+						  oldrepos =  repomap.get(currentuser);
+
+						repomap.set(currentuser, oldrepos + 1);
+
+						//console.log(currentrepo.name);
+		
+						countCommits(currentuser, currentreponame);
+					}
+					//updateReport();
+									}
 
 	      		
 	    	}
