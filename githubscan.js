@@ -7,7 +7,7 @@
 var gitusers = [	'bashir-panjshiri','EvertdeVries','Callisto79','R3NOCP','erwinsnijder',
 					'HarrietKiyai','jellevanderschaaf','JoskedeJong','Ludelaplu','tzanto',
 					'Aletta104','drohnwynandrt','OHiddema','SamirHartlief','Aarnoud-Meijer','DJLemstra',
-					'JaccoGritter','LanaSijsling','jdereus87','supersmitty2018','IvoJongmans'];
+					'JaccoGritter','LanaSijsling','jdereus87','mschmidtcrans','IvoJongmans'];
 
 var commitmap = new Map();
 var repomap = new Map();
@@ -18,7 +18,8 @@ function countCommits(susername, sreponame) {
 
 	//api.github.com/repos/:user/repositoryNameFromArray/commits?author=:user 
   $.ajax({
-        url: "https://api.github.com/repos/" + susername  + "/" + sreponame + "/commits?author="  + susername,
+       // url: "https://api.github.com/repos/" + susername  + "/" + sreponame + "/commits?author="  + susername,
+    	 url: "https://api.github.com/repos/" + susername  + "/" + sreponame + "/commits",
     	
         // url: "https://api.github.com/rate_limit",
         headers: { Authorization: "Basic " + GITAUTH },
