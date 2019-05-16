@@ -13,34 +13,20 @@ var commitmap = new Map();
 var repomap = new Map();
 
 
+function mylog(message) {
+//	console.log(message);
+	$('#logdiv').html(message);
+}
+
+
 function updateReport() {
 
-		console.log('====== report ===== ');
+		mylog('===== GitHub scan ready ===== ');
 		
-		var stats = [];
-
-	//sample data
-		var tabledata1 = [
-		/*	{id:1, name:"Jan", repocount:12, commitcount:100},
-			{id:2, name:"Piet", repocount:4, commitcount:40},
-			{id:3, name:"Klaas", repocount:7, commitcount:80},
-			{id:4, name:"Toos", repocount:2, commitcount:10},
-			{id:5, name:"Toos", repocount:2, commitcount:10},
-			{id:6, name:"Toos", repocount:2, commitcount:10},
-			{id:7, name:"Toos", repocount:2, commitcount:10},
-			{id:8, name:"Toos", repocount:2, commitcount:10},
-		*/
-		];
+		var tabledata1 = [];
 
 		for (var gituser of gitusers)
-	    {
-
-	       console.log(gituser + "," + repomap.get(gituser) + ',' + commitmap.get(gituser));
-	//       $('#outputdiv').html( $('#outputdiv').html() + "<li>" + gituser + " : " + repomap.get(gituser) + " repos, " + commitmap.get(gituser) + " commits"); 
-	  
-	       let xrow = { name : gituser, repocount : repomap.get(gituser), commitcount :  commitmap.get(gituser) };
-	       tabledata1.push(xrow);
-	   }    
+	       tabledata1.push({ name : gituser, repocount : repomap.get(gituser), commitcount :  commitmap.get(gituser) });
 
 		var table = new Tabulator("#example-table", {
 			height: 400, // set height of table to enable virtual DOM
@@ -74,7 +60,7 @@ function countCommits(susername, sreponame) {
         headers: { Authorization: "Basic " + GITAUTH },
 		success: function(result){
 			
-				console.log(susername + "." + sreponame + " : " + result.length);
+				mylog(susername + "." + sreponame + " : " + result.length);
 				let oldcommits = 0;
 				if (commitmap.get(susername) != null)
 				  oldcommits =  commitmap.get(susername);
@@ -100,9 +86,10 @@ $(document).ready(function(){
 	
 $(document).ajaxStop(function() {
   // place code to be executed on completion of last outstanding ajax call here
-  	console.log(" READY" );
+  	mylog(" READY" );
   	updateReport();
 });
+
 
 
 	$('#scanbutton').click(function() {
@@ -113,6 +100,7 @@ $(document).ajaxStop(function() {
 
 
 	    let currentuser = gituser;
+	    mylog(currentuser);
 
 	    $.ajax({
 	        url: "https://api.github.com/users/" + gituser + "/repos",
@@ -120,7 +108,7 @@ $(document).ajaxStop(function() {
 	        headers: { Authorization: "Basic " + GITAUTH },
 			success: function(result){
 
-				console.log(result);
+				mylog(result);
 
 				for (var gitrepo of result) {
 					let currentreponame = gitrepo.name;
@@ -137,7 +125,7 @@ $(document).ajaxStop(function() {
 
 						repomap.set(currentuser, oldrepos + 1);
 
-						//console.log(currentrepo.name);
+						//mylog(currentrepo.name);
 		
 						countCommits(currentuser, currentreponame);
 					}
