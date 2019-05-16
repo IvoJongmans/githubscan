@@ -53,17 +53,9 @@ $(document).ready(function(){
 		
 		var stats = [];
 
-		for (var gituser of gitusers)
-	    {
-
-	       console.log(gituser + "," + repomap.get(gituser) + ',' + commitmap.get(gituser));
-	       $('#outputdiv').html( $('#outputdiv').html() + "<li>" + gituser + " : " + repomap.get(gituser) + " repos, " + commitmap.get(gituser) + " commits"); 
-	   }    
-
-
 	//sample data
 		var tabledata1 = [
-			{id:1, name:"Jan", repocount:12, commitcount:100},
+		/*	{id:1, name:"Jan", repocount:12, commitcount:100},
 			{id:2, name:"Piet", repocount:4, commitcount:40},
 			{id:3, name:"Klaas", repocount:7, commitcount:80},
 			{id:4, name:"Toos", repocount:2, commitcount:10},
@@ -71,19 +63,28 @@ $(document).ready(function(){
 			{id:6, name:"Toos", repocount:2, commitcount:10},
 			{id:7, name:"Toos", repocount:2, commitcount:10},
 			{id:8, name:"Toos", repocount:2, commitcount:10},
-
+		*/
 		];
 
+		for (var gituser of gitusers)
+	    {
+
+	       console.log(gituser + "," + repomap.get(gituser) + ',' + commitmap.get(gituser));
+	//       $('#outputdiv').html( $('#outputdiv').html() + "<li>" + gituser + " : " + repomap.get(gituser) + " repos, " + commitmap.get(gituser) + " commits"); 
+	  
+	       let xrow = { name : gituser, repocount : repomap.get(gituser), commitcount :  commitmap.get(gituser) };
+	       tabledata1.push(xrow);
+	   }    
+
 		var table = new Tabulator("#example-table", {
-			height:200, // set height of table to enable virtual DOM
+			height: 400, // set height of table to enable virtual DOM
+			autoResize:true,
 			data:tabledata1, //load initial data into table
 			layout:"fitColumns", //fit columns to width of table (optional)
 			columns:[ //Define Table Columns
 				{title:"Name", field:"name", sorter:"string", width:150},
-				{title:"ReposCount", field:"repocount", sorter:"number", align:"left"},
-				{title:"CommitsCount", field:"commitcount", sorter:"number", align:"left" },
-				{title:"Repos", field:"repocount", sorter:"number", align:"left", formatter:"progress"},
-				{title:"Commits", field:"commitcount", sorter:"number", align:"left", formatter:"progress"},
+				{title:"Repositories", field:"repocount", sorter:"number", align:"left", formatter:"progress",formatterParams:{legend:true,labelField:"repocount"} },
+				{title:"Commits", field:"commitcount", sorter:"number", align:"left", formatter:"progress",formatterParams:{legend:true,labelField:"commitcount"} },
 
 			],
 		    rowClick:function(e, id, data, row){ //trigger an alert message when the row is clicked
