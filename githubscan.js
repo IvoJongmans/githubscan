@@ -4,13 +4,13 @@
 //
 //   let GITAUTH = btoa("mygithubuser" + ":" + "mygithubpassword");
 
-var gitusers = [	'bashir-panjshiri','EvertdeVries','Callisto79','R3NOCP','erwinsnijder',
+var gitusers = [	'bashir-panjshiri','EvertdeVries','sietsezwaagstra','R3NOCP','erwinsnijder',
 					'HarrietKiyai','jellevanderschaaf','JoskedeJong','LucienKoot','tzanto',
 					'Aletta104','drohnwynandrt','OHiddema','SamirHartlief','Aarnoud-Meijer','DJLemstra',
 					'JaccoGritter','LanaSijsling','jdereus87','mschmidtcrans','IvoJongmans'];
 
 // shorter test array
-//var gitusers = [	'bashir-panjshiri','EvertdeVries','mschmidtcrans','IvoJongmans'];
+//var gitusers = [	'bashir- panjshiri','EvertdeVries','mschmidtcrans','IvoJongmans'];
 
 var commitmap = new Map();
 var repomap = new Map();
