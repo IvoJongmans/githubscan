@@ -22,6 +22,10 @@ var phpmap = new Map();
 var commitdates = [];
 
 
+var commitindex = [];
+
+
+
 const _MS_PER_DAY = 1000 * 60 * 60 * 24;
 
 // a and b are javascript Date objects
@@ -34,9 +38,6 @@ function dateDiffInDays(a, b) {
 }
 
 
-
-
-
 function mylog(message) {
 //	console.log(message);
 	$('#logdiv').html(message);
@@ -47,6 +48,95 @@ function round(value, precision) {
     var multiplier = Math.pow(10, precision || 0);
     return Math.round(value * multiplier) / multiplier;
 }
+
+
+function updateChart(showuser) {
+
+
+	var res = commitdates.reduce(function(groups, item) {
+	    const val = item.username;
+    	groups[val] = groups[val] || []
+    	groups[val].push(item);
+    	return groups
+  	}, {});
+
+	console.log(res);	
+
+	xuser = res[showuser];
+		
+		var res2 = xuser.reduce(function(groups, item) {
+		    const val = item.daysfromstart;
+	    	groups['days' + val] = groups['days'+val] || 0;
+	    	groups['days' + val] = 1 + (groups['days' + val]);
+	    	return groups
+	  	}, []);
+
+		
+		tempdata = [];
+		cumscore = 0;
+		for (idag = 0; idag < 30; idag++)
+		{	
+			dagscore = res2['days' + idag] || 0;
+			cumscore += dagscore;
+			tempdata.push(cumscore);
+		}
+
+		/* Add a basic data series with six labels and values */
+		var data = {
+		  labels: ['1', '2', '3', '4', '5', '6', '7', '8'],
+		  series: [
+		    {
+		      data: tempdata
+		    },
+		    {
+		      data: [5,10,15,20,25,25,25,35,45,55,65,75,75,75,85,95,105,115,125,125,125, 140,155,170,185,200]
+		    }
+		    
+		  ]
+		};
+
+
+		/* Set some base options (settings will override the default settings in Chartist.js *see default settings*). We are adding a basic label interpolation function for the xAxis labels. */
+		var options = {
+		  width: 800,
+		  height: 400,
+		  axisX: {
+		    labelInterpolationFnc: function(value) {
+		      return 'W ' + value;
+		    }
+		  }
+		};
+
+		/* Now we can specify multiple responsive settings that will override the base settings based on order and if the media queries match. In this example we are changing the visibility of dots and lines as well as use different label interpolations for space reasons. */
+		var responsiveOptions = [
+		  ['screen and (min-width: 641px) and (max-width: 1024px)', {
+		    showPoint: false,
+		    axisX: {
+		      labelInterpolationFnc: function(value) {
+		        return 'W ' + value;
+		      }
+		    }
+		  }],
+		  ['screen and (max-width: 640px)', {
+		    showLine: false,
+		    axisX: {
+		      labelInterpolationFnc: function(value) {
+		        return 'W' + value;
+		      }
+		    }
+		  }]
+		];
+
+		/* Initialize the chart with the above settings */
+		var xx = new Chartist.Line('#my-chart', data, options, responsiveOptions);
+		console.log(xx);
+
+		// end chart
+
+	
+}
+
+
 
 function updateReport() {
 
@@ -74,13 +164,49 @@ function updateReport() {
 
 			],
 		    rowClick:function(e, id, data, row){ //trigger an alert message when the row is clicked
-		    	alert("Row " + id + " Clicked!!!!");
-		    	console.log(data);
+		    	//alert("Row " + id + " Clicked!!!!");
+
+		    	x = id;
+		    	//alert(x._row.data.name);
+		    		updateChart(x._row.data.name);
+		    	//console.log(data);
 		    },
 		});
 
 
-	};
+
+			// commit map bevat voor elke commity een entry
+			// nu groeperen per user per dag, dus als op dag 5 meerdere commits zijn voor Jan, deze optellen.
+	
+// 		var groupBy = function(xs, key) {
+//   return xs.reduce(function(rv, x) {
+//     (rv[x[key]] = rv[x[key]] || []).push(x);
+//     return rv;
+//   }, {});
+// };
+
+	// var res = commitdates.reduce(function(groups, item) {
+	//     const val = item.username;
+ //    	groups[val] = groups[val] || []
+ //    	groups[val].push(item);
+ //    	return groups
+ //  	}, {});
+
+	// console.log(res);	
+
+
+	// groepeer per username
+
+	
+
+		/// begin chart
+
+
+		// prepare example data
+
+
+
+	}; // end update report
     
 
 
@@ -177,9 +303,17 @@ function countCommits(susername, sreponame) {
 
 						logrow = { username : susername, reponame : sreponame, commitdate : commitentry.commit.author.date, daysfromstart : daysfromstart };
 						console.log(logrow);
+						commitdates.push(logrow);
 
 						if (daysfromstart >= 0)
 							validcommits++;
+
+						commitindex[susername] = commitindex[susername] || [];
+				    	commitindex[susername]['days' + daysfromstart] = commitindex[susername]['days'+daysfromstart] || 0;
+				    	commitindex[susername]['days' + daysfromstart] = 1 + (commitindex[susername]['days'+daysfromstart]);
+
+
+
 
 					}
 
