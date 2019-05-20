@@ -49,11 +49,11 @@ function updateReport() {
 				{title:"Name", field:"name", sorter:"string", width:250},
 				{title:"Repositories", field:"repocount", sorter:"number", align:"left", width: 125},
 				{title:"Commits", field:"commitcount", sorter:"number", align:"left", width: 125 },
-				{title:"C/R", field:"crratio", sorter:"number", align:"left", width: 125 },
+			/* {title:"C/R", field:"crratio", sorter:"number", align:"left", width: 125 },
 				{title:"HTML", field:"htmlbytes", sorter:"number", align:"left", width: 125 },
 				{title:"CSS", field:"cssbytes", sorter:"number", align:"left", width: 125 },
 				{title:"Javascript", field:"javascriptbytes", sorter:"number", align:"left", width: 125 },
-				{title:"PHP", field:"phpbytes", sorter:"number", align:"left", width: 125 },
+				{title:"PHP", field:"phpbytes", sorter:"number", align:"left", width: 125 },*/
 
 			],
 		    rowClick:function(e, id, data, row){ //trigger an alert message when the row is clicked
@@ -210,7 +210,7 @@ $(document).ajaxStop(function() {
 						//mylog(currentrepo.name);
 		
 						countCommits(currentuser, currentreponame);
-						countLanguages(currentuser, currentreponame);
+						//countLanguages(currentuser, currentreponame);
 					}
 					//updateReport();
 									}
