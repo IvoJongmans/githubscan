@@ -89,7 +89,7 @@ function updateChart(showuser) {
 		      data: tempdata
 		    },
 		    {
-		      data: [5,10,15,20,25,25,25,35,45,55,65,75,75,75,85,95,105,115,125,125,125, 140,155,170,185,200]
+		      data: [5,10,15,20,25,25,25,35,45,55,65,75,75,75,85,95,105,115,125,125,125, 140,155,170,185,200, 200, 200]
 		    }
 		    
 		  ]
@@ -153,9 +153,9 @@ function updateReport() {
 			data:tabledata1, //load initial data into table
 			layout:"fitColumns", //fit columns to width of table (optional)
 			columns:[ //Define Table Columns
-				{title:"Name", field:"name", sorter:"string", width:250},
-				{title:"Repositories", field:"repocount", sorter:"number", align:"left", width: 125},
-				{title:"Commits", field:"commitcount", sorter:"number", align:"left", width: 125 },
+				{title:"Name", field:"name", sorter:"string", width:200},
+				{title:"Repositories", field:"repocount", sorter:"number", align:"left", width: 100},
+				{title:"Commits", field:"commitcount", sorter:"number", align:"left", width: 100 },
 			/* {title:"C/R", field:"crratio", sorter:"number", align:"left", width: 125 },
 				{title:"HTML", field:"htmlbytes", sorter:"number", align:"left", width: 125 },
 				{title:"CSS", field:"cssbytes", sorter:"number", align:"left", width: 125 },

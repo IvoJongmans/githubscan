@@ -13,14 +13,34 @@
 
 	</script>
 
+<style>
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-gap: 5px;
+  background-color: #2196F3;
+  padding: 5px;
+}
+
+.grid-container > div {
+  background-color: rgba(255, 255, 255, 0.8);
+/*  text-align: center;
+  padding: 20px 0;
+  font-size: 30px;
+*/
+}
+</style>
+
 </head>
 <body>
 
 <button id="scanbutton">Scan now</button><p id="logdiv">-</p>
-
-<div id="example-table"></div>
 <div id="outputdiv"></div>
-<div id="my-chart"></div>
+
+<div class="grid-container">
+	<div id="example-table"></div>
+	<div id="my-chart"></div>
+</div>
 
 </body>
 </html>
