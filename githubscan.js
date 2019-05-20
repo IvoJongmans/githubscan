@@ -19,6 +19,23 @@ var cssmap = new Map();
 var javascriptmap = new Map();
 var phpmap = new Map();
 
+var commitdates = [];
+
+
+const _MS_PER_DAY = 1000 * 60 * 60 * 24;
+
+// a and b are javascript Date objects
+function dateDiffInDays(a, b) {
+  // Discard the time and time-zone information.
+  const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+  const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+
+  return Math.floor((utc2 - utc1) / _MS_PER_DAY);
+}
+
+
+
+
 
 function mylog(message) {
 //	console.log(message);
@@ -148,8 +165,26 @@ function countCommits(susername, sreponame) {
 				if (commitmap.get(susername) != null)
 				  oldcommits =  commitmap.get(susername);
 
-				commitmap.set(susername, oldcommits + result.length);
+				validcommits = 0;
 				
+				for (commitentry of result)
+					{
+						sdatetime = commitentry.commit.author.date;
+						sdatetime = sdatetime.split(" ")[0]; 
+						sdateCommit    =  new Date(sdatetime);
+						sdateStart 	   = new Date("2019/04/29");
+						daysfromstart  =  dateDiffInDays(sdateStart, sdateCommit);
+
+						logrow = { username : susername, reponame : sreponame, commitdate : commitentry.commit.author.date, daysfromstart : daysfromstart };
+						console.log(logrow);
+
+						if (daysfromstart >= 0)
+							validcommits++;
+
+					}
+
+					commitmap.set(susername, oldcommits + validcommits);
+
 		
 				}
 
