@@ -10,7 +10,7 @@ var gitusers = [	'bashir-panjshiri','EvertdeVries','sietsezwaagstra','R3NOCP','e
 					'JaccoGritter','LanaSijsling','jdereus87','mschmidtcrans','IvoJongmans'];
 
 // shorter test array
-//var gitusers = [	'bashir- panjshiri','EvertdeVries','mschmidtcrans','IvoJongmans'];
+// var gitusers = [	'bashir-panjshiri','mschmidtcrans','IvoJongmans'];
 
 var commitmap = new Map();
 var repomap = new Map();
@@ -21,9 +21,7 @@ var phpmap = new Map();
 
 var commitdates = [];
 
-
 var commitindex = [];
-
 
 
 const _MS_PER_DAY = 1000 * 60 * 60 * 24;
@@ -36,6 +34,11 @@ function dateDiffInDays(a, b) {
 
   return Math.floor((utc2 - utc1) / _MS_PER_DAY);
 }
+
+
+var currentbootcampdaynumber = dateDiffInDays(new Date("2019/04/29"), new Date()) + 1;
+
+
 
 
 function mylog(message) {
@@ -74,7 +77,7 @@ function updateChart(showuser) {
 		
 		tempdata = [];
 		cumscore = 0;
-		for (idag = 0; idag < 30; idag++)
+		for (idag = 0; idag < currentbootcampdaynumber; idag++)
 		{	
 			dagscore = res2['days' + idag] || 0;
 			cumscore += dagscore;
@@ -83,7 +86,7 @@ function updateChart(showuser) {
 
 		/* Add a basic data series with six labels and values */
 		var data = {
-		  labels: ['1', '2', '3', '4', '5', '6', '7', '8'],
+		  // labels: ['1', '2', '3', '4', '5', '6', '7', '8'],
 		  series: [
 		    {
 		      data: tempdata
@@ -103,33 +106,14 @@ function updateChart(showuser) {
 		  showPoint: false,
 		  axisX: {
 		    labelInterpolationFnc: function(value) {
-		      return 'W ' + value;
+		      return value;
 		    }
 		  }
 		};
 
-		/* Now we can specify multiple responsive settings that will override the base settings based on order and if the media queries match. In this example we are changing the visibility of dots and lines as well as use different label interpolations for space reasons. */
-		var responsiveOptions = [
-		  ['screen and (min-width: 641px) and (max-width: 1024px)', {
-		    showPoint: false,
-		    axisX: {
-		      labelInterpolationFnc: function(value) {
-		        return 'W ' + value;
-		      }
-		    }
-		  }],
-		  ['screen and (max-width: 640px)', {
-		    showLine: false,
-		    axisX: {
-		      labelInterpolationFnc: function(value) {
-		        return 'W' + value;
-		      }
-		    }
-		  }]
-		];
-
+		
 		/* Initialize the chart with the above settings */
-		var xx = new Chartist.Line('#my-chart', data, options, responsiveOptions);
+		var xx = new Chartist.Line('#my-chart', data, options);
 		console.log(xx);
 
 		// end chart
@@ -157,11 +141,11 @@ function updateReport() {
 				{title:"Name", field:"name", sorter:"string", width:200},
 				{title:"Repositories", field:"repocount", sorter:"number", align:"left", width: 100},
 				{title:"Commits", field:"commitcount", sorter:"number", align:"left", width: 100 },
-			/* {title:"C/R", field:"crratio", sorter:"number", align:"left", width: 125 },
+			    {title:"C/R", field:"crratio", sorter:"number", align:"left", width: 125 },
 				{title:"HTML", field:"htmlbytes", sorter:"number", align:"left", width: 125 },
 				{title:"CSS", field:"cssbytes", sorter:"number", align:"left", width: 125 },
 				{title:"Javascript", field:"javascriptbytes", sorter:"number", align:"left", width: 125 },
-				{title:"PHP", field:"phpbytes", sorter:"number", align:"left", width: 125 },*/
+				{title:"PHP", field:"phpbytes", sorter:"number", align:"left", width: 125 },
 
 			],
 		    rowClick:function(e, id, data, row){ //trigger an alert message when the row is clicked
@@ -378,7 +362,7 @@ $(document).ajaxStop(function() {
 						//mylog(currentrepo.name);
 		
 						countCommits(currentuser, currentreponame);
-						//countLanguages(currentuser, currentreponame);
+						countLanguages(currentuser, currentreponame);
 					}
 					//updateReport();
 									}
