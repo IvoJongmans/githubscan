@@ -100,6 +100,7 @@ function updateChart(showuser) {
 		var options = {
 		  width: 800,
 		  height: 400,
+		  showPoint: false,
 		  axisX: {
 		    labelInterpolationFnc: function(value) {
 		      return 'W ' + value;
@@ -311,8 +312,6 @@ function countCommits(susername, sreponame) {
 						commitindex[susername] = commitindex[susername] || [];
 				    	commitindex[susername]['days' + daysfromstart] = commitindex[susername]['days'+daysfromstart] || 0;
 				    	commitindex[susername]['days' + daysfromstart] = 1 + (commitindex[susername]['days'+daysfromstart]);
-
-
 
 
 					}
